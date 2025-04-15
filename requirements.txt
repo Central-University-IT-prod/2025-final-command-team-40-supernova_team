@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pyjwt
+redis
+sqlmodel
+sqlalchemy
+psycopg2-binary
+passlib
+minio
+python-multipart
+openai
+requests
+aiohttp
+PyYAML

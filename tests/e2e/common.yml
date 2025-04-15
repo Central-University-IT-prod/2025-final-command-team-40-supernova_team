@@ -1,0 +1,14 @@
+name: Base actions
+
+variables:
+  film_name: "Лорды раздевалки"
+  film_year: "1999"
+
+stages:
+  - name: Drop tables
+    id: drop
+    request:
+      url: "{BASE_URL}/debug/drop"
+      method: POST
+    response:
+      status_code: 200

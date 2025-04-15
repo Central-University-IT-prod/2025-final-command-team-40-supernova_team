@@ -1,0 +1,77 @@
+test_name: Watchlist
+
+includes:
+  - !include common.yml
+
+stages:
+  - type: ref
+    id: drop
+
+  - name: Register
+    request:
+      method: POST
+      url: "{BASE_URL}/auth/register"
+      data:
+        username: user_1
+        password: qwerty123
+    response:
+      save:
+        json:
+          access_token: access_token
+
+  - name: Add film to watched (1)
+    request:
+      method: POST
+      url: "{BASE_URL}/watched/add"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+      json:
+        id: null
+        title: Film 1
+        description: hello there
+        rating: null
+    response:
+      status_code: 200
+  
+  - name: Add film to watched (2)
+    request:
+      method: POST
+      url: "{BASE_URL}/watched/add"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+      json:
+        id: null
+        title: Film 2
+        description: there hello
+        rating: null
+    response:
+      status_code: 200
+
+  - name: Add film to watchlist
+    request:
+      method: POST
+      url: "{BASE_URL}/watchlist/add"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+      json:
+        id: null
+        title: Film 1
+        description: hello there
+        rating: null
+    response:
+      status_code: 200
+  
+  - name: Get profile
+    request:
+      url: "{BASE_URL}/profile/"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      json:
+        username: user_1
+        watched_count: 2
+        watchlist_count: 1
+        watched_films:
+          - title: Film 2
+          - title: Film 1
+

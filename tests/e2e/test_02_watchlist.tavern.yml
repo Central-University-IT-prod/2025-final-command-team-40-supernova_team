@@ -1,0 +1,67 @@
+test_name: Watchlist
+
+includes:
+  - !include common.yml
+
+stages:
+  - type: ref
+    id: drop
+
+  - name: Register
+    request:
+      method: POST
+      url: "{BASE_URL}/auth/register"
+      data:
+        username: user_1
+        password: qwerty123
+    response:
+      save:
+        json:
+          access_token: access_token
+
+  - name: Get empty watchlist
+    request:
+      method: GET
+      url: "{BASE_URL}/watchlist/"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
+      json: []
+
+  - name: Add film to watchlist
+    request:
+      method: POST
+      url: "{BASE_URL}/watchlist/add"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+      json:
+        id: null
+        title: Film 1
+        description: hello there
+        rating: null
+    response:
+      status_code: 200
+
+  - name: Get watchlist
+    request:
+      method: GET
+      url: "{BASE_URL}/watchlist/"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
+      json:
+        - title: Film 1
+      save:
+        json:
+          film_id: "[0].id"
+
+  - name: Delete from watchlist
+    request:
+      method: DELETE
+      url: "{BASE_URL}/watchlist/remove/{film_id}"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200

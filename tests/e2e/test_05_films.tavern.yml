@@ -1,0 +1,35 @@
+test_name: Films
+
+includes:
+  - !include common.yml
+
+stages:
+  - type: ref
+    id: drop
+
+  - name: Register
+    request:
+      method: POST
+      url: "{BASE_URL}/auth/register"
+      data:
+        username: user_1
+        password: qwerty123
+    response:
+      save:
+        json:
+          access_token: access_token
+  
+  - name: Add image
+    request:
+      method: POST
+      url: "{BASE_URL}/films/add-image"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+      files:
+        file: "./tests/e2e/test_image.png"
+    
+    response:
+      status_code: 200
+      save:
+        json:
+          image_url: image_url

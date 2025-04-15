@@ -1,0 +1,33 @@
+test_name: Kinopoisk API
+
+includes:
+  - !include ../e2e/common.yml
+
+marks:
+  - external
+
+stages:
+  - type: ref
+    id: drop
+
+  - name: Register
+    request:
+      url: "{BASE_URL}/auth/register"
+      method: POST
+      data:
+        username: user_1
+        password: qwerty123
+    response:
+      save:
+        json:
+          access_token: access_token
+
+  - name: Search for films
+    request:
+      url: "{BASE_URL}/films/"
+      params:
+        search: "Мстители"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
